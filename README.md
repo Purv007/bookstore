@@ -1,256 +1,244 @@
-📚 BookStore - Full Stack Online Book Shopping Platform
+# 📚 Bookstore Management System
 
-A complete eCommerce-style BookStore web app where users can browse books, manage cart, checkout, place orders, write reviews, and admins can manage books, orders, and revenue analytics.
+![Java](https://img.shields.io/badge/Java-17-blue?logo=openjdk)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2-brightgreen?logo=springboot)
+![React](https://img.shields.io/badge/React-18-61dafb?logo=react)
+![Vite](https://img.shields.io/badge/Vite-Build-yellow?logo=vite)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-blue?logo=mysql)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Status](https://img.shields.io/badge/Status-Active-success)
 
-Built with React + Vite, TailwindCSS, Spring Boot, MySQL, and deployed using Vercel + Render + Clever Cloud.
+A complete full‑stack bookstore management system with a backend (Spring Boot) and frontend (React + Vite). This project includes authentication, book management, orders, reviews, and an admin dashboard.
 
-🚀 Key Features
-👤 User Features
+---
 
-Browse books with search and genre filters
+## 📌 Table of Contents
+- Features
+- Tech Stack
+- Prerequisites
+- Quick Start
+- Manual Setup
+- Default Users
+- Deployment
+- Environment Variables
+- API Endpoints
+- Folder Structure
+- Testing
+- Troubleshooting
+- License
+- Support
 
-View book details, stock, and reviews
+---
 
-Add to cart / update / remove items
+## ✨ Features
 
-Checkout + place orders
+### Backend
+- JWT authentication with Spring Security  
+- CRUD for books, orders, and reviews  
+- Admin dashboard with analytics  
+- Pagination, filtering, sorting  
+- Swagger/OpenAPI documentation  
 
-View own order history
+### Frontend
+- React + Vite + TailwindCSS  
+- Shopping cart, wishlist, checkout  
+- Admin book & order management  
+- Framer Motion animations  
+- Recharts analytics  
 
-Add reviews and ratings
+---
 
-Secure JWT-based authentication
+## 🧰 Tech Stack
 
-🧑‍💼 Admin Features
+### Backend
+- Java 17  
+- Spring Boot 3.2  
+- JPA / Hibernate  
+- MySQL  
+- Maven  
 
-Add, edit, delete books
+### Frontend
+- React 18  
+- Vite  
+- TailwindCSS  
+- Axios  
+- React Router  
+- Framer Motion  
 
-Manage book stock
+---
 
-View all user orders
+## 📦 Prerequisites
+- Java 17+  
+- Node.js 18+  
+- MySQL 8+  
+- Maven  
+- Docker (optional)
 
-Update order statuses (Pending → Delivered)
+---
 
-Dashboard analytics
+## 🚀 Quick Start
 
-Revenue charts (Recharts)
+### Clone Repository
+```bash
+git clone https://github.com/Purv007/bookstore
+cd bookstore
+```
 
-🏗️ System Architecture
-+---------------------+       +------------------------+        +----------------------------+
-|     React Frontend  | ----> |  Spring Boot Backend   | -----> |  MySQL (Clever Cloud)      |
-| (Vercel Deployment) |       | (Render Deployment)     |       |  Database Storage          |
-+---------------------+       +------------------------+        +----------------------------+
-         |                                |                               |
-         |                                v                               v
-         |                         Authentication (JWT)            Book & Order Data
-         |                                
-         v
-   Beautiful UI + Cart + Reviews
+### Backend Setup
+```bash
+cd bookstore-backend
+mvn spring-boot:run
+```
 
-🧩 Tech Stack
-Layer	Technology
-Frontend	React, Vite, TailwindCSS, Axios, Lucide Icons, Framer Motion
-Backend	Spring Boot, Spring Security, JWT Auth, JPA, Hibernate
-Database	MySQL (Clever Cloud)
-Deployment	Vercel (Frontend) + Render (Backend)
-Charts	Recharts for Admin Revenue Chart
-Formatting & Components	Custom UI components
-🔧 Environment Variables Setup
-🟦 Frontend (.env)
-VITE_API_BASE_URL=https://your-backend.onrender.com
+### Frontend Setup
+```bash
+cd bookstore-frontend
+npm install
+npm run dev
+```
 
-🟩 Backend (Render Environment Variables)
-KEY	VALUE
-SPRING_DATASOURCE_URL	jdbc:mysql://…
-SPRING_DATASOURCE_USERNAME	DB username
-SPRING_DATASOURCE_PASSWORD	DB password
-JWT_SECRET	Your secret key
-CORS_ORIGINS	https://your-frontend.vercel.app
+---
 
-SPRING_JPA_HIBERNATE_DDL_AUTO	update
+## 🛠 Manual Local Setup
 
-Example:
+### Backend – application.properties
+```
+spring.datasource.url=jdbc:mysql://localhost:3306/bookstore_db
+spring.datasource.username=root
+spring.datasource.password=yourpassword
+jwt.secret=your_secret_key
+```
 
-CORS_ORIGINS=https://bookstore-gules-ten.vercel.app
-SPRING_DATASOURCE_URL=jdbc:mysql://bmcxpdncr2dtrqj5kzcf-mysql.services.clever-cloud.com:3306/bmcxpdncr2dtrqj5kzcf
-SPRING_DATASOURCE_USERNAME=uwgdgcpgwp4uvklj
-SPRING_DATASOURCE_PASSWORD=S05nvg9goTDFwZ2O9vVf
-JWT_SECRET=your-secret
-SPRING_JPA_HIBERNATE_DDL_AUTO=update
+### Frontend – .env
+```
+VITE_API_BASE_URL=http://localhost:8080
+```
 
-🧱 Project Structure
+---
+
+## 👤 Default Users
+
+| Role | Username | Password |
+|------|----------|----------|
+| Admin | admin | admin123 |
+| Customer | customer | customer123 |
+
+---
+
+## 🌍 Deployment
+
+### Docker Compose
+```bash
+docker-compose up -d
+```
+
+### Vercel (Frontend)
+```bash
+vercel
+```
+
+### Render / Railway (Backend)
+- Add MySQL variables  
+- Add JWT secret  
+- Add CORS origins  
+
+---
+
+## 🔐 Environment Variables
+
+### Backend
+- SPRING_DATASOURCE_URL  
+- SPRING_DATASOURCE_USERNAME  
+- SPRING_DATASOURCE_PASSWORD  
+- JWT_SECRET  
+- CORS_ORIGINS  
+
+### Frontend
+- VITE_API_BASE_URL  
+
+---
+
+## 📡 API Endpoints
+
+### Authentication
+- `POST /api/login`
+- `POST /api/register`
+
+### Books
+- `GET /api/books`
+- `POST /api/books` (Admin)
+- `PUT /api/books/{id}`
+- `DELETE /api/books/{id}`
+
+### Orders
+- `POST /api/orders`
+- `GET /api/orders`
+
+### Reviews
+- `POST /api/reviews`
+- `GET /api/reviews/book/{id}`
+
+---
+
+## 📁 Folder Structure
+
+```
 bookstore/
 │
 ├── bookstore-backend/
-│   ├── src/main/java/com/bookstore/...
-│   ├── src/main/resources/application.properties
-│   ├── pom.xml
-│   └── Dockerfile (optional)
+│   ├── src/main/java/com/bookstore/
+│   │   ├── config/
+│   │   ├── controller/
+│   │   ├── dto/
+│   │   ├── exception/
+│   │   ├── model/
+│   │   ├── repository/
+│   │   └── service/
+│   ├── src/main/resources/
+│   └── pom.xml
 │
-└── bookstore-frontend/
-    ├── src/
-    │   ├── pages/
-    │   ├── components/
-    │   ├── context/
-    │   ├── App.jsx
-    │   └── main.jsx
-    ├── public/
-    ├── package.json
-    └── vite.config.js
+├── bookstore-frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── context/
+│   │   ├── assets/
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── package.json
+│   └── vite.config.js
+│
+├── docker-compose.yml
+└── README.md
+```
 
-💻 Local Setup
-1️⃣ Clone Repo
-git clone https://github.com/<your-username>/bookstore.git
-cd bookstore
+---
 
-2️⃣ Backend Setup
-Install dependencies:
-cd bookstore-backend
-mvn clean install
+## 🧪 Testing
 
-Run backend:
-mvn spring-boot:run
+Run backend tests:
+```bash
+mvn test
+```
 
-API available at:
+---
 
-http://localhost:8080
+## 🐞 Troubleshooting
 
+| Problem | Solution |
+|--------|----------|
+| Backend not connecting to MySQL | Check credentials & port |
+| CORS blocked | Update allowed origins |
+| Frontend not loading | Fix VITE_API_BASE_URL |
+| Ports 8080/5173 busy | Change ports in config |
 
-Swagger:
+---
 
-http://localhost:8080/swagger-ui.html
+## 📄 License
+MIT License.
 
-3️⃣ Frontend Setup
-Install packages
-cd bookstore-frontend
-npm install
+---
 
-Start development server
-npm run dev
+## 📬 Support
+Open an issue on GitHub for help.
 
-
-App runs at:
-
-http://localhost:5173
-
-🌍 Deployment Guide
-🚀 Backend Deployment (Render)
-
-Push backend code to GitHub
-
-Create a Render Web Service
-
-Add environment variables
-
-Build command:
-
-mvn clean install
-
-
-Start command:
-
-java -jar target/*.jar
-
-
-Deploy
-
-🎨 Frontend Deployment (Vercel)
-
-Push frontend to GitHub
-
-Import project in Vercel
-
-Add:
-
-VITE_API_BASE_URL=https://your-backend.onrender.com
-
-
-Deploy
-
-🛢 Database Setup (Clever Cloud)
-
-Create MySQL instance
-
-Copy host, username, password into Render
-
-No manual configuration needed
-
-🔐 Admin Login in Swagger
-Step 1 — Login
-POST /api/login
-{
-  "username": "admin",
-  "password": "admin"
-}
-
-Step 2 — Copy the token
-Step 3 — Click Authorize
-
-Paste:
-
-Bearer <token>
-
-🖼️ Screenshots (Add to repo)
-🏠 Home Page
-
-(Insert image)
-
-📘 Book Details Page
-
-(Insert image)
-
-🧺 Cart UI
-
-(Insert image)
-
-💳 Checkout
-
-(Insert image)
-
-🧑‍💼 Admin Dashboard
-
-(Insert image)
-
-📊 Sample API Responses
-Get Books
-[
-  {
-    "id": 1,
-    "title": "The Alchemist",
-    "author": "Paulo Coelho",
-    "price": 19.99,
-    "stock": 10
-  }
-]
-
-Order Response
-{
-  "id": 1,
-  "totalPrice": 47.98,
-  "paymentStatus": "PAID"
-}
-
-🧠 Future Enhancements
-
-Add wishlist
-
-Payment gateway integration
-
-Email notifications
-
-Admin charts with more metrics
-
-User profile editing
-
-👨‍💻 Author
-
-Purv Patel
-📧 patelpurv908@gmail.com
-
-🔗 GitHub: https://github.com/Purv007
-
-🔗 LinkedIn: https://linkedin.com/in/purv-patel-b31a84280
-
-📜 License
-
-Licensed under the MIT License.
