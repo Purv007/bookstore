@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import axios from 'axios'
+import api from '../api/api'     // changed
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
@@ -14,7 +14,6 @@ const Checkout = () => {
   const [shippingAddress, setShippingAddress] = useState(user?.address || '')
   const [paymentMethod, setPaymentMethod] = useState('card')
   const [processing, setProcessing] = useState(false)
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -30,7 +29,7 @@ const Checkout = () => {
         quantity: item.quantity,
       }))
 
-      const response = await axios.post(`${API_BASE_URL}/api/orders`, {
+      await api.post(`/api/orders`, {     // changed
         items: orderItems,
         shippingAddress,
         paymentMethod,

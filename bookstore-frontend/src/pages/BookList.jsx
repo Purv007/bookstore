@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Search, Star, Filter } from 'lucide-react'
-import axios from 'axios'
+import api from '../api/api'   // changed
 
 const BookList = () => {
   const [books, setBooks] = useState([])
@@ -10,9 +10,6 @@ const BookList = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedGenre, setSelectedGenre] = useState('')
   const [genres, setGenres] = useState([])
-
-  const API_BASE_URL =
-    import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
 
   useEffect(() => {
     fetchGenres()
@@ -25,7 +22,7 @@ const BookList = () => {
 
   const fetchGenres = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/books/genres`)
+      const response = await api.get(`/api/books/genres`)   // changed
       setGenres(response.data)
     } catch (error) {
       console.error('Error fetching genres:', error)
@@ -35,7 +32,7 @@ const BookList = () => {
   const fetchBooks = async () => {
     setLoading(true)
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/books`)
+      const response = await api.get(`/api/books`)   // changed
       setBooks(response.data || [])
     } catch (error) {
       console.error('Error fetching books:', error)

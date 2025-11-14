@@ -1,10 +1,19 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Plus, Edit, Trash2, Package, DollarSign, TrendingUp, Book } from 'lucide-react'
-import axios from 'axios'
+import { Plus, Edit, Trash2, Package, DollarSign, Book } from 'lucide-react'
+import api from '../api/api'   // axios replaced with api
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts'
 
 const AdminDashboard = () => {
   const { user } = useAuth()
@@ -14,6 +23,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true)
   const [showBookForm, setShowBookForm] = useState(false)
   const [editingBook, setEditingBook] = useState(null)
+
   const [bookForm, setBookForm] = useState({
     title: '',
     author: '',
@@ -24,7 +34,6 @@ const AdminDashboard = () => {
     stock: '',
     imageUrl: '',
   })
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
 
   useEffect(() => {
     fetchData()
@@ -33,10 +42,11 @@ const AdminDashboard = () => {
   const fetchData = async () => {
     try {
       const [booksRes, ordersRes, statsRes] = await Promise.all([
-        axios.get(`${API_BASE_URL}/api/books?page=0&size=100`),
-        axios.get(`${API_BASE_URL}/api/orders/all`),
-        axios.get(`${API_BASE_URL}/api/admin/stats`),
+        api.get(`/api/books?page=0&size=100`),
+        api.get(`/api/orders/all`),
+        api.get(`/api/admin/stats`),
       ])
+
       setBooks(booksRes.data.content || [])
       setOrders(ordersRes.data || [])
       setStats(statsRes.data || {})
@@ -56,15 +66,18 @@ const AdminDashboard = () => {
         price: parseFloat(bookForm.price),
         stock: parseInt(bookForm.stock),
       }
+
       if (editingBook) {
-        await axios.put(`${API_BASE_URL}/api/books/${editingBook.id}`, bookData)
+        await api.put(`/api/books/${editingBook.id}`, bookData)
         toast.success('Book updated successfully!')
       } else {
-        await axios.post(`${API_BASE_URL}/api/books`, bookData)
+        await api.post(`/api/books`, bookData)
         toast.success('Book created successfully!')
       }
+
       setShowBookForm(false)
       setEditingBook(null)
+
       setBookForm({
         title: '',
         author: '',
@@ -75,6 +88,7 @@ const AdminDashboard = () => {
         stock: '',
         imageUrl: '',
       })
+
       fetchData()
     } catch (error) {
       toast.error(error.response?.data?.error || 'Failed to save book')
@@ -83,8 +97,9 @@ const AdminDashboard = () => {
 
   const handleDeleteBook = async (id) => {
     if (!window.confirm('Are you sure you want to delete this book?')) return
+
     try {
-      await axios.delete(`${API_BASE_URL}/api/books/${id}`)
+      await api.delete(`/api/books/${id}`)
       toast.success('Book deleted successfully!')
       fetchData()
     } catch (error) {
@@ -109,7 +124,7 @@ const AdminDashboard = () => {
 
   const handleUpdateOrderStatus = async (orderId, status) => {
     try {
-      await axios.put(`${API_BASE_URL}/api/orders/${orderId}/status?status=${status}`)
+      await api.put(`/api/orders/${orderId}/status?status=${status}`)
       toast.success('Order status updated!')
       fetchData()
     } catch (error) {
@@ -135,7 +150,10 @@ const AdminDashboard = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+          Admin Dashboard
+        </h1>
+
         <button
           onClick={() => {
             setShowBookForm(true)
@@ -160,11 +178,7 @@ const AdminDashboard = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="card"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-600 dark:text-gray-400">Total Revenue</p>
@@ -175,6 +189,7 @@ const AdminDashboard = () => {
             <DollarSign className="w-12 h-12 text-primary-600" />
           </div>
         </motion.div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -191,6 +206,7 @@ const AdminDashboard = () => {
             <Package className="w-12 h-12 text-primary-600" />
           </div>
         </motion.div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -220,6 +236,7 @@ const AdminDashboard = () => {
             <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
               {editingBook ? 'Edit Book' : 'Add New Book'}
             </h2>
+
             <form onSubmit={handleBookSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -234,6 +251,7 @@ const AdminDashboard = () => {
                     onChange={(e) => setBookForm({ ...bookForm, title: e.target.value })}
                   />
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
                     Author
@@ -247,6 +265,7 @@ const AdminDashboard = () => {
                   />
                 </div>
               </div>
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
@@ -260,6 +279,7 @@ const AdminDashboard = () => {
                     onChange={(e) => setBookForm({ ...bookForm, genre: e.target.value })}
                   />
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
                     ISBN
@@ -273,6 +293,7 @@ const AdminDashboard = () => {
                   />
                 </div>
               </div>
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
@@ -287,6 +308,7 @@ const AdminDashboard = () => {
                     onChange={(e) => setBookForm({ ...bookForm, price: e.target.value })}
                   />
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
                     Stock
@@ -300,6 +322,7 @@ const AdminDashboard = () => {
                   />
                 </div>
               </div>
+
               <div>
                 <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
                   Image URL
@@ -311,6 +334,7 @@ const AdminDashboard = () => {
                   onChange={(e) => setBookForm({ ...bookForm, imageUrl: e.target.value })}
                 />
               </div>
+
               <div>
                 <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
                   Description
@@ -323,10 +347,12 @@ const AdminDashboard = () => {
                   onChange={(e) => setBookForm({ ...bookForm, description: e.target.value })}
                 />
               </div>
+
               <div className="flex space-x-4">
                 <button type="submit" className="btn-primary">
                   {editingBook ? 'Update' : 'Create'}
                 </button>
+
                 <button
                   type="button"
                   onClick={() => {
@@ -346,7 +372,10 @@ const AdminDashboard = () => {
       {/* Revenue Chart */}
       {chartData.length > 0 && (
         <div className="card mb-8">
-          <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Revenue Chart</h2>
+          <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
+            Revenue Chart
+          </h2>
+
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -362,7 +391,10 @@ const AdminDashboard = () => {
 
       {/* Books Management */}
       <div className="card mb-8">
-        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Books Management</h2>
+        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
+          Books Management
+        </h2>
+
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -375,14 +407,18 @@ const AdminDashboard = () => {
                 <th className="text-left py-2 text-gray-700 dark:text-gray-300">Actions</th>
               </tr>
             </thead>
+
             <tbody>
               {books.map((book) => (
                 <tr key={book.id} className="border-b border-gray-200 dark:border-gray-700">
                   <td className="py-2 text-gray-900 dark:text-white">{book.title}</td>
                   <td className="py-2 text-gray-600 dark:text-gray-400">{book.author}</td>
                   <td className="py-2 text-gray-600 dark:text-gray-400">{book.genre}</td>
-                  <td className="py-2 text-gray-600 dark:text-gray-400">${book.price.toFixed(2)}</td>
+                  <td className="py-2 text-gray-600 dark:text-gray-400">
+                    ${book.price.toFixed(2)}
+                  </td>
                   <td className="py-2 text-gray-600 dark:text-gray-400">{book.stock}</td>
+
                   <td className="py-2">
                     <div className="flex space-x-2">
                       <button
@@ -391,6 +427,7 @@ const AdminDashboard = () => {
                       >
                         <Edit className="w-5 h-5" />
                       </button>
+
                       <button
                         onClick={() => handleDeleteBook(book.id)}
                         className="text-red-600 hover:text-red-700"
@@ -408,7 +445,10 @@ const AdminDashboard = () => {
 
       {/* Orders Management */}
       <div className="card">
-        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Orders Management</h2>
+        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
+          Orders Management
+        </h2>
+
         <div className="space-y-4">
           {orders.map((order) => (
             <div
@@ -417,11 +457,15 @@ const AdminDashboard = () => {
             >
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">Order #{order.id}</h3>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">
+                    Order #{order.id}
+                  </h3>
+
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     {order.username} - {new Date(order.createdAt).toLocaleDateString()}
                   </p>
                 </div>
+
                 <div className="flex items-center space-x-4">
                   <select
                     value={order.status}
@@ -434,16 +478,23 @@ const AdminDashboard = () => {
                     <option value="DELIVERED">Delivered</option>
                     <option value="CANCELLED">Cancelled</option>
                   </select>
-                  <span className="font-bold text-primary-600">${order.totalPrice.toFixed(2)}</span>
+
+                  <span className="font-bold text-primary-600">
+                    ${order.totalPrice.toFixed(2)}
+                  </span>
                 </div>
               </div>
+
               <div className="space-y-2">
                 {order.orderItems.map((item) => (
                   <div key={item.id} className="flex justify-between text-sm">
                     <span className="text-gray-700 dark:text-gray-300">
                       {item.book.title} × {item.quantity}
                     </span>
-                    <span className="font-semibold">${item.subtotal.toFixed(2)}</span>
+
+                    <span className="font-semibold">
+                      ${item.subtotal.toFixed(2)}
+                    </span>
                   </div>
                 ))}
               </div>

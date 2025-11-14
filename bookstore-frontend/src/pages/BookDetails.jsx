@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Star, ShoppingCart, ArrowLeft, Plus, Minus } from 'lucide-react'
-import axios from 'axios'
+import api from '../api/api'   // changed
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
@@ -16,7 +16,6 @@ const BookDetails = () => {
   const [book, setBook] = useState(null)
   const [loading, setLoading] = useState(true)
   const [quantity, setQuantity] = useState(1)
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
 
   useEffect(() => {
     fetchBook()
@@ -24,7 +23,7 @@ const BookDetails = () => {
 
   const fetchBook = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/books/${id}`)
+      const response = await api.get(`/api/books/${id}`)   // changed
       setBook(response.data)
     } catch (error) {
       console.error('Error fetching book:', error)

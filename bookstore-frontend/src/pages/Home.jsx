@@ -2,16 +2,15 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight, BookOpen, Star } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import axios from 'axios'
+import api from '../api/api'   // changed
 
 const Home = () => {
   const [featuredBooks, setFeaturedBooks] = useState([])
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
 
   useEffect(() => {
     const fetchFeaturedBooks = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/books?page=0&size=6`)
+        const response = await api.get(`/api/books?page=0&size=6`)   // changed
         setFeaturedBooks(response.data.content || [])
       } catch (error) {
         console.error('Error fetching featured books:', error)
@@ -133,6 +132,7 @@ const Home = () => {
                 Browse through thousands of books across various genres
               </p>
             </motion.div>
+
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -148,6 +148,7 @@ const Home = () => {
                 Read reviews from verified customers before making a purchase
               </p>
             </motion.div>
+
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
